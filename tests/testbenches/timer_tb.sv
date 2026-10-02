@@ -6,7 +6,7 @@
 
 module timer_tb #(
     parameter int WIDTH=2,
-    parameter int SELECT_BITS=1,
+    parameter int SELECT_BITS=2,
     parameter int CLOCK_PERIOD=100
 ) ();
     // inputs
@@ -45,13 +45,20 @@ module timer_tb #(
             // start timer
             rst = 1;
             count = (WIDTH)'(i);
-            @(posedge clk); #5;
-            rst = 0; #5;
+            @(posedge clk); #10;
+            rst = 0; #10;
             repeat(i) begin
-                $display("%d: %b, %b, %b, %p", i, done, dut.rst, dut.mux_out[-1], dut.mux_out);
-                @(posedge clk); #5;
+                // $display("%d: %b, %b, %p", i, done, dut.rst, dut.mux_out);
+                $display("%d: %b, %b, mo %p, mi[0] %b", i, done, dut.rst, dut.mux_out, dut.mux_in[0]);
+                // $display("%d: %b, %b, mo %p, mi[0] %b, mi[1] %b", i, done, dut.rst, dut.mux_out, dut.mux_in[0], dut.mux_in[1]);
+                @(posedge clk); #10;
             end
-            $display("%d: %b, %b, %b, %p", i, done, dut.rst, dut.mux_out[-1], dut.mux_out);
+            @(posedge clk); #10;
+            @(posedge clk); #10;
+            @(posedge clk); #10;
+            // $display("%d: %b, %b, %p", i, done, dut.rst, dut.mux_out);
+            $display("%d: %b, %b, mo %p, mi[0] %b", i, done, dut.rst, dut.mux_out, dut.mux_in[0]);
+            // $display("%d: %b, %b, mo %p, mi[0] %b, mi[1] %b", i, done, dut.rst, dut.mux_out, dut.mux_in[0], dut.mux_in[1]);
         end
 
         // rst = 1;
