@@ -21,7 +21,7 @@ done = 1
 
 By using an LFSR, you will only need a single 4-input XOR gate, `ceil(log_2(N+1))` flip flops arranged in a shifter, and an `ceil(log_2(N+1))`-input AND gate.  This avoids using an adder or an extremely long shifter with a traditional counter.  So our longest path is very short and the resource utilization is very low.
 
-This was able to hit the max clock speed for a Xilinx Spartan 7 with -1 speed grade (464 MHz).
+This was able to hit the max clock speed for a Xilinx Spartan 7 with -1 speed grade (464 MHz) on a timer of 1458 cycles.
 
 ## `timer.sv`
 Building on the `lfsr_timer`, a series of muxes and timer modules can be used to build a custom timer with a runtime defined amount to count for.  They are generally wired as such:
@@ -32,4 +32,4 @@ It's similar to a barrel shifter.
 
 The downside to this is that you have a very high resource utilization since for each layer you need `2**SELECT_WIDTH` lfsr_timers.
 
-Your `SELECT_WIDTH` should be dependent on the size of the LUTs for your system.
+This design was able to hit max clock speed for a Xilinx Spartan 7 with a 3-bit counter width (464 MHz).
