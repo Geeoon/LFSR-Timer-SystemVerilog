@@ -30,4 +30,6 @@ Building on the `lfsr_timer`, a series of muxes and timer modules can be used to
 
 It's similar to a barrel shifter.
 
-The downside to this is that you have a very high resource utilization since for each layer, you need N lfsr_timers, larger than the last layer.
+The downside to this is that you have a very high resource utilization since for each layer you need `2**SELECT_WIDTH` lfsr_timers.
+
+Your `SELECT_WIDTH` should be dependent on the size of the LUTs for your system.
