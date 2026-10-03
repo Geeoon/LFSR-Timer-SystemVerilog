@@ -18,7 +18,7 @@ module lfsr_timer #(
 
     output logic done
 );
-    if (N == 0) begin
+    if (COUNT < 1) begin
         $error("COUNT needs to be at least 1.");
     end
     /* verilator lint_off SELRANGE */
@@ -82,10 +82,10 @@ module lfsr_timer #(
             lfsr_state <= (N)'(calculate_start());
         end else begin
             lfsr_state <= get_next_state(lfsr_state);
+            if (lfsr_state == '1) begin
+                done <= 1;
+            end
         end
 
-        if (lfsr_state == '1) begin
-            done <= 1;
-        end
     end  // always_ff
 endmodule  // lfsr_timer
