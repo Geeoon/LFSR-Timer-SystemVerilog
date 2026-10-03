@@ -42,7 +42,7 @@ module timer #(
         // timers
         for (genvar j = 1; j < 2**SELECT_BITS; j++) begin
             lfsr_timer #(
-                .COUNT(j*(2**i))
+                .COUNT(j*(2**(SELECT_BITS*i)))
             ) timer_m (
                 .clk,
                 .rst(rst | mux_out[i-1]),

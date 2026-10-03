@@ -5,8 +5,8 @@
  */
 
 module timer_tb #(
-    parameter int WIDTH=2,
-    parameter int SELECT_BITS=2,
+    parameter int WIDTH=8,
+    parameter int SELECT_BITS=4,
     parameter int CLOCK_PERIOD=100
 ) ();
     // inputs
@@ -37,52 +37,30 @@ module timer_tb #(
 
     initial begin
         // dump waveforms
-        $dumpfile("waveforms/lfsr_timer_tb.vcd");
+        $dumpfile("waveforms/timer_tb.vcd");
         $dumpvars;
 
         $display(" -- Starting timer test -- ");
-        for (int i = 0; i < 4; i++) begin
+        for (int i = 0; i < 2**WIDTH; i++) begin
             // start timer
             rst = 1;
             count = (WIDTH)'(i);
-            @(posedge clk); #10;
-            rst = 0; #10;
+            @(posedge clk); #5;
+            rst = 0; #5;
+            // wait
             repeat(i) begin
-                // $display("%d: %b, %b, %p", i, done, dut.rst, dut.mux_out);
-                $display("%d: %b, %b, mo %p, mi[0] %b", i, done, dut.rst, dut.mux_out, dut.mux_in[0]);
-                // $display("%d: %b, %b, mo %p, mi[0] %b, mi[1] %b", i, done, dut.rst, dut.mux_out, dut.mux_in[0], dut.mux_in[1]);
-                @(posedge clk); #10;
+                assert(~done);
+                @(posedge clk); #5;
             end
-            @(posedge clk); #10;
-            @(posedge clk); #10;
-            @(posedge clk); #10;
-            // $display("%d: %b, %b, %p", i, done, dut.rst, dut.mux_out);
-            $display("%d: %b, %b, mo %p, mi[0] %b", i, done, dut.rst, dut.mux_out, dut.mux_in[0]);
-            // $display("%d: %b, %b, mo %p, mi[0] %b, mi[1] %b", i, done, dut.rst, dut.mux_out, dut.mux_in[0], dut.mux_in[1]);
+            
+            // check timer stays
+            repeat(10) begin
+                assert(done);
+                @(posedge clk); #5;
+            end
         end
 
-        // rst = 1;
-        // count = 3;
-        // @(posedge clk); #5;
-        // rst = 0;
-        // repeat(100) begin
-        //     $display("%b, %p", done, dut.mux_out);
-        //     @(posedge clk); #5;
-        // end
-
-        $finish;
-        // there should be COUNT cycles before the signal is high
-        // repeat(count) begin
-        //     assert(~done);
-        //     @(posedge clk); #5;
-        // end  // repeat
-
-        // repeat(10) begin
-        //     assert(done);
-        //     @(posedge clk); #5;
-        // end  // repeat
-
-        // $display(" -- FINISHED TESTS -- ");
+        $display(" -- FINISHED TESTS -- ");
         $finish;
     end
 endmodule  // lfsr_timer_tb

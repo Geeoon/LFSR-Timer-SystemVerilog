@@ -5,7 +5,7 @@
  */
 
 module lfsr_timer_tb #(
-    parameter int COUNT=5,
+    parameter int COUNT=1,
     parameter int CLOCK_PERIOD=100
 ) ();
     // inputs
@@ -34,22 +34,23 @@ module lfsr_timer_tb #(
         $dumpvars;
 
         $display(" -- Starting lfsr_timer test -- ");
-        // start timer
-        rst = 1;
-        @(posedge clk); #5;
-        rst = 0;
-
-        // there should be COUNT cycles before the signal is high
-        repeat(COUNT) begin
-            assert(~done);
-            @(posedge clk); #5;
-        end  // repeat
-
         repeat(10) begin
-            assert(done);
+            // start timer
+            rst = 1;
             @(posedge clk); #5;
-        end  // repeat
+            rst = 0;
 
+            // there should be COUNT cycles before the signal is high
+            repeat(COUNT) begin
+                assert(~done);
+                @(posedge clk); #5;
+            end  // repeat
+
+            repeat(10) begin
+                assert(done);
+                @(posedge clk); #5;
+            end  // repeat
+        end  // repeat
         $display(" -- FINISHED TESTS -- ");
         $finish;
     end
